@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Payment</title>
+    <style>
+        body {
+            background: #121212;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: #f1f1f1;
+        }
+
+        .form-box {
+            background: #1e1e1e;
+            max-width: 500px;
+            margin: auto;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.07);
+        }
+
+        h2 {
+            text-align: center;
+            color: #00e676;
+            margin-bottom: 25px;
+        }
+
+        .summary p {
+            font-size: 15px;
+            margin: 8px 0;
+            color: #ccc;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 15px;
+            display: block;
+            color: #eee;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            font-size: 15px;
+            background: #2a2a2a;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00e676;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background-color: #00bcd4;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0097a7;
+        }
+
+        @media (max-width: 600px) {
+            .form-box {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>Confirm Your Payment</h2>
+
+        <div class="summary">
+            <p><strong>Name:</strong> {{ booking.name }}</p>
+            <p><strong>Email:</strong> {{ booking.email }}</p>
+            <p><strong>Phone:</strong> {{ booking.phone }}</p>
+            <p><strong>Movie:</strong> {{ booking.movie }}</p>
+            <p><strong>Date:</strong> {{ booking.date }}</p>
+            <p><strong>Time:</strong> {{ booking.time }}</p>
+            <p><strong>Seats:</strong> {{ booking.seats }}</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('payment') }}">
+            <label for="payment">Payment Method:</label>
+            <select name="payment" id="payment" required>
+                <option value="">Select</option>
+                <option value="UPI">UPI</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Net Banking">Net Banking</option>
+            </select>
+
+            <label for="amount">Amount:</label>
+            <input type="number" name="amount" id="amount" value="" required>
+
+            <button type="submit">💳 Confirm Payment</button>
+        </form>
+    </div>
+</body>
+</html>

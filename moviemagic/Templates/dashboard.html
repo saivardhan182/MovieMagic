@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Magic Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url("https://img.freepik.com/free-photo/movie-background-collage_23-2149876028.jpg") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+            color: #fff;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        select, button {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        select {
+            background-color: #fff;
+            color: #000;
+        }
+
+        button {
+            background-color: #ff5733;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff784e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Movie Magic</h1>
+        <h2>You are one step away from movies in your city</h2>
+        <form id="movieForm">
+            <select name="state" id="state" onchange="updateCities()">
+                <option value="" disabled selected>Select State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Maharashtra">Maharashtra</option>
+            </select>
+            <br>
+            <select name="city" id="city">
+                <option value="" disabled selected>Select City</option>
+            </select>
+            <br>
+            <select name="language" id="language">
+                <option value="" disabled selected>Select Language</option>
+                <option>English</option>
+                <option>Hindi</option>
+                <option>Telugu</option>
+                <option>Tamil</option>
+            </select>
+            <br>
+            <button type="submit">Search Movies</button>
+        </form>
+    </div>
+
+    <script>
+        const stateToCities = {
+            "Andhra Pradesh": ["Kavali", "Nellore", "Ongole", "Kandukur", "Guntur"],
+            "Telangana": ["Hyderabad", "Warangal", "Karimnagar", "Medak"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Aurangabad"]
+        };
+
+        function updateCities() {
+            const state = document.getElementById("state").value;
+            const citySelect = document.getElementById("city");
+
+            citySelect.innerHTML = "";
+
+            const defaultOption = document.createElement("option");
+            defaultOption.text = "Select City";
+            defaultOption.disabled = true;
+            defaultOption.selected = true;
+            defaultOption.value = "";
+            citySelect.add(defaultOption);
+
+            stateToCities[state].forEach(city => {
+                const option = document.createElement("option");
+                option.value = city;
+                option.text = city;
+                citySelect.add(option);
+            });
+        }
+
+        document.getElementById("movieForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const state = document.getElementById("state").value;
+            const city = document.getElementById("city").value;
+            const language = document.getElementById("language").value;
+
+            if (!state || !city || !language) {
+                alert("Please select all fields before searching.");
+                return;
+            }
+
+            const query = `?city=${encodeURIComponent(city)}&language=${encodeURIComponent(language)}`;
+            window.location.href = "/results" + query;
+        });
+    </script>
+</body>
+</html>

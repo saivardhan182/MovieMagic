@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Seats</title>
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #1c1c1c;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00e676;
+        }
+
+        .seats {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            justify-items: center;
+            margin-bottom: 30px;
+        }
+
+        .seat {
+            width: 45px;
+            height: 45px;
+            background-color: #444;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        .seat:hover {
+            background-color: #555;
+        }
+
+        .seat.selected {
+            background-color: #28a745;
+        }
+
+        .seat.booked {
+            background-color: #dc3545;
+            pointer-events: none;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: #00bcd4;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #008c9e;
+        }
+
+        @media (max-width: 600px) {
+            .seats {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .seat {
+                width: 40px;
+                height: 40px;
+                font-size: 11px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
+
+    <script>
+        function toggleSeat(seat) {
+            seat.classList.toggle("selected");
+        }
+
+        function submitSeats() {
+            const selectedSeats = [...document.querySelectorAll('.seat.selected')]
+                                  .map(seat => seat.dataset.seat);
+            if (selectedSeats.length === 0) {
+                alert("Please select at least one seat.");
+                return;
+            }
+            document.getElementById('selected_seats').value = selectedSeats.join(',');
+            document.getElementById('seatForm').submit();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Select Your Seats for {{ booking_data.movie }}</h2>
+
+        <form id="seatForm" method="POST" action="{{ url_for('select_seats') }}">
+            <input type="hidden" name="name" value="{{ booking_data.name }}">
+            <input type="hidden" name="email" value="{{ booking_data.email }}">
+            <input type="hidden" name="phone" value="{{ booking_data.phone }}">
+            <input type="hidden" name="movie" value="{{ booking_data.movie }}">
+            <input type="hidden" name="date" value="{{ booking_data.date }}">
+            <input type="hidden" name="time" value="{{ booking_data.time }}">
+            <input type="hidden" name="seats" id="selected_seats">
+
+            <div class="seats">
+                {% for row in range(1, 6) %}
+                    {% for col in range(1, 11) %}
+                        {% set seat = 'R' ~ row ~ 'S' ~ col %}
+                        <div class="seat" data-seat="{{ seat }}" onclick="toggleSeat(this)">
+                            {{ seat }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+            <button type="button" onclick="submitSeats()">🎟 Proceed to Payment</button>
+        </form>
+    </div>
+</body>
+</html>

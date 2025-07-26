@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Results</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url("https://img.freepik.com/free-photo/movie-background-collage_23-2149876028.jpg") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            padding: 40px 20px;
+            min-height: 100vh;
+            backdrop-filter: blur(3px);
+            background-color: rgba(0, 0, 0, 0.4); /* dark overlay for readability */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.poster {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.info {
+    padding: 15px;
+    text-align: center;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 5px;
+}
+
+.meta {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.book-button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.book-button:hover {
+    background-color: #0056b3;
+}
+
+
+
+        .no-movies {
+            text-align: center;
+            font-size: 20px;
+            color: #fff;
+            margin-top: 100px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        @media screen and (max-width: 600px) {
+            .poster {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Currently Running Movies</h1>
+        {% if movies %}
+        <div class="movie-grid">
+    {% for movie in movies %}
+    <div class="card">
+        <img class="poster" src="{{ url_for('static', filename=movie[4]) }}" alt="{{ movie[1] }}">
+        <div class="info">
+            <div class="title">{{ movie[1] }}</div>
+            <div class="meta">U | {{ movie[3] }}</div>
+            <form action="{{ url_for('book', movie=movie[1]) }}" method="get">
+                <button type="submit" class="book-button">Book Ticket</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+        {% else %}
+            <p class="no-movies">No movies found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
